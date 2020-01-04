@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BannerDao"><!-- 写对应类名全路径 -->
+    <select id="getBannerByBId" resultType="Banner" parameterType="int">
+        select * from t_banner
+        where bId = #{bId}
+    </select>
+
+    <select id="getAllBanner" resultType="Banner">
+        select * from t_banner
+    </select>
+
+    <insert id="addBanner" parameterType="Banner">
+        insert into t_banner(bTitle, bUrl, bPic)
+        value (#{bTitle},#{bUrl},#{bPic})
+    </insert>
+
+    <delete id="delBanner" parameterType="int">
+        delete from t_banner
+        where bId = #{bId}
+    </delete>
+
+    <update id="updBanner" parameterType="Banner">
+        update t_banner set
+            bPic=#{bPic},
+            bTitle=#{bTitle},
+            bUrl=#{bUrl}
+            where bId=#{bId}
+    </update>
+</mapper>

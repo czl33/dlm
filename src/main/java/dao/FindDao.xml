@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.FindDao"><!-- 写对应类名全路径 -->
+
+   <insert id="publishFind"  parameterType="Find" useGeneratedKeys="true" keyProperty="findId">
+        insert into find (publishUserId, publishTitle, publishDate, findMsg, findImage, findDate, findAddress, findUserTel, findUserEmail, findUserName, publishState) values (#{publishUserId},#{publishTitle},#{publishDate},#{findMsg},#{findImage},#{findDate},#{findAddress},#{findUserTel},#{findUserEmail},#{findUserName},#{publishState})
+   </insert>
+
+    <update id="updateFind" parameterType="Find">
+        update find
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="publishTitle!=null">publishTitle=#{publishTitle},</if>
+            <if test="publishDate!=null">publishDate=#{publishDate},</if>
+            <if test="findMsg!=null">findMsg=#{findMsg},</if>
+            <if test="findImage!=null">findImage=#{findImage},</if>
+            <if test="findDate!=null">findDate=#{findDate},</if>
+            <if test="findAddress!=null">findAddress=#{findAddress},</if>
+            <if test="findUserTel!=null">findUserTel=#{findUserTel},</if>
+            <if test="findUserEmail!=null">findUserEmail=#{findUserEmail},</if>
+            <if test="findUserName!=null">findUserName=#{findUserName},</if>
+
+        </trim>
+        where findId = #{findId}
+    </update>
+
+    <update id="updatePublishState" parameterType="Find">
+        update find set publishState = #{publishState} where findId = #{findId}
+    </update>
+
+    <select id="getFindById" parameterType="int" resultType="Find">
+        select * from Find where findId = #{findId}
+    </select>
+
+    <select id="getAllFind" resultType="Find">
+        select * from Find
+    </select>
+
+    <select id="getAllFindByUserId" parameterType="int" resultType="Find">
+        select * from Find where publishUserId = #{UserId}
+    </select>
+
+    <delete id="delFindByFindId" parameterType="int">
+        delete from Find where findId = #{findId}
+    </delete>
+
+    <select id="getAllFindByState" parameterType="int" resultType="Find">
+        select * from Find where publishState = #{state}
+    </select>
+
+    <select id="getDataByLimit" resultType="Find">
+        select * from find
+        <where>
+            <if test="key != null and key != '' ">
+                findMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+
+        </where>
+         order by findId desc limit #{page},#{count}
+    </select>
+
+    <select id="getAllFindCount" resultType="int">
+        select count(*) from find
+    </select>
+
+    <select id="getLikeCount" resultType="int">
+        select count(*) from find
+        <where>
+            <if test="key != null and key != '' ">
+                findMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+        </where>
+    </select>
+
+
+
+
+
+
+
+
+    <select id="getDataByPublishState" resultType="Find">
+        select * from find
+        <where>
+            publishState = 1
+            <if test="key != null and key != '' ">
+                and (findMsg like '%${key}%' or publishTitle like '%${key}%')
+            </if>
+        </where>
+        order by findId desc limit #{page},#{count}
+    </select>
+
+    <select id="getDataByNoReadState" resultType="Find">
+        select * from find
+        <where>
+            (publishState = 0 or publishState = 2)
+            <if test="key != null and key != '' ">
+                and (findMsg like '%${key}%' or publishTitle like '%${key}%')
+            </if>
+        </where>
+        order by findId desc limit #{page},#{count}
+    </select>
+
+    <select id="getDataByReadFailState" resultType="Find">
+        select * from find
+        <where>
+            publishState = 3
+            <if test="key != null and key != '' ">
+                and (findMsg like '%${key}%' or publishTitle like '%${key}%')
+            </if>
+        </where>
+        order by findId desc limit #{page},#{count}
+    </select>
+
+
+
+
+
+    <select id="getCountByPublishState" resultType="int">
+        select count(*) from find
+        <where>
+            publishState = 1
+            <if test="key != null and key != '' ">
+                and findMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getCountByNoReadState" resultType="int">
+        select count(*) from find
+        <where>
+            (publishState = 0 or publishState = 2)
+            <if test="key != null and key != '' ">
+                and findMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getCountByReadFailState" resultType="int">
+        select count(*) from find
+        <where>
+            publishState = 3
+            <if test="key != null and key != '' ">
+                and findMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+        </where>
+    </select>
+
+</mapper>

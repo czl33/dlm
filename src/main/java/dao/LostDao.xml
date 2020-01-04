@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.LostDao">
+    <insert id="publishLost"  parameterType="Lost" useGeneratedKeys="true" keyProperty="lostId">
+        insert into lost
+        (publishUserId, publishTitle, publishDate, lostMsg, lostImage, lostDate, lostAddress, lostUserTel, lostUserEmail, lostUserName, publishState)
+        values (#{publishUserId},#{publishTitle},#{publishDate},#{lostMsg},#{lostImage},#{lostDate},#{lostAddress},#{lostUserTel},#{lostUserEmail},#{lostUserName},#{publishState})
+   </insert>
+
+    <update id="updateLost" parameterType="Lost">
+        update lost
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="publishTitle != null and publishTitle != '' ">publishTitle=#{publishTitle},</if>
+            <if test="publishDate != null and publishDate != '' ">publishDate=#{publishDate},</if>
+            <if test="lostMsg != null and lostMsg != '' ">lostMsg=#{lostMsg},</if>
+            <if test="lostImage != null and lostImage != '' ">lostImage=#{lostImage},</if>
+            <if test="lostDate != null and lostDate != '' ">lostDate=#{lostDate},</if>
+            <if test="lostAddress != null and lostAddress != '' ">lostAddress=#{lostAddress},</if>
+            <if test="lostUserTel != null and lostUserTel != '' ">lostUserTel=#{lostUserTel},</if>
+            <if test="lostUserEmail != null and lostUserEmail != '' ">lostUserEmail=#{lostUserEmail},</if>
+            <if test="lostUserName != null and lostUserName != '' ">lostUserName=#{lostUserName},</if>
+
+        </trim>
+        where lostId = #{lostId}
+    </update>
+
+    <update id="updateLostPublishState" parameterType="Lost">
+        update lost set publishState = #{publishState} where lostId = #{lostId}
+    </update>
+
+    <select id="getLostById" parameterType="int" resultType="Lost">
+        select * from Lost where lostId = #{lostId}
+    </select>
+
+    <select id="getAllLost" resultType="Lost">
+        select * from Lost
+    </select>
+
+    <select id="getAllLostByUserId" parameterType="int" resultType="Lost">
+        select * from Lost where publishUserId = #{userId}
+    </select>
+
+    <delete id="delLostByLostId" parameterType="int">
+        delete from Lost where lostId = #{lostId}
+    </delete>
+
+    <select id="getAllLostByState" parameterType="int" resultType="Lost">
+        select * from Lost where publishState = #{state}
+    </select>
+
+    <select id="getDataByLimit" resultType="Lost">
+        select * from lost
+        <where>
+            <if test="key != null and key != '' ">
+                lostMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+
+        </where>
+        order by lostId desc limit #{page},#{count}
+    </select>
+
+    <select id="getAllLostCount" resultType="int">
+        select count(*) from lost
+    </select>
+
+    <select id="getLikeCount" resultType="int">
+        select count(*) from lost
+        <where>
+            <if test="key != null and key != '' ">
+                lostMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+        </where>
+    </select>
+
+
+
+
+
+    <select id="getDataByLostPublishState" resultType="Lost">
+        select * from Lost
+        <where>
+            publishState = 1
+            <if test="key != null and key != '' ">
+                and (lostMsg like '%${key}%' or publishTitle like '%${key}%')
+            </if>
+        </where>
+        order by lostId desc limit #{page},#{count}
+    </select>
+
+    <select id="getDataByLostNoReadState" resultType="Lost">
+        select * from Lost
+        <where>
+            (publishState = 0 or publishState = 2)
+            <if test="key != null and key != '' ">
+                and (lostMsg like '%${key}%' or publishTitle like '%${key}%')
+            </if>
+        </where>
+        order by lostId desc limit #{page},#{count}
+    </select>
+
+    <select id="getDataByLostReadFailState" resultType="Lost">
+        select * from Lost
+        <where>
+            publishState = 3
+            <if test="key != null and key != '' ">
+                and (lostMsg like '%${key}%' or publishTitle like '%${key}%')
+            </if>
+        </where>
+        order by lostId desc limit #{page},#{count}
+    </select>
+
+
+
+
+    <select id="getCountByLostPublishState" resultType="int">
+        select count(*) from Lost
+        <where>
+            publishState = 1
+            <if test="key != null and key != '' ">
+                and lostMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getCountByLostNoReadState" resultType="int">
+        select count(*) from Lost
+        <where>
+            (publishState = 0 or publishState = 2)
+            <if test="key != null and key != '' ">
+                and lostMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getCountByLostReadFailState" resultType="int">
+        select count(*) from Lost
+        <where>
+            publishState = 3
+            <if test="key != null and key != '' ">
+                and lostMsg like '%${key}%' or publishTitle like '%${key}%'
+            </if>
+        </where>
+    </select>
+
+</mapper>

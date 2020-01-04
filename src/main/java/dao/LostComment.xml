@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.LostComment"><!-- 写对应类名全路径 -->
+
+   <insert id="insterComment"  parameterType="Find" useGeneratedKeys="true" keyProperty="findId">
+        insert into l_comment (lostId, uId, conMess, PublicTime) values (#{lostId},#{uId},#{conMess},#{PublicTime})
+   </insert>
+
+
+</mapper>
